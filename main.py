@@ -10,43 +10,70 @@ from PyQt5.QtWidgets import QMainWindow, QLabel, QGridLayout, QWidget
 from PyQt5.QtWidgets import QPushButton
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import *
+
 from UI import Ui_Dialog
 from graffiti import GraffitiDialog
+from image_padding import image_to_hex, pad_image_center, save_hex_image
+from aes import image_hex_array, custom_key, Encrypt, Decrypt
 
 class MainWindow(QMainWindow, Ui_Dialog):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
         self.setWindowTitle("Signature Pad")
+        self.lb_pwd_confirm.hide()
         
         # confirm & reset buttons
         self.btn_confirm.clicked.connect(self.on_confirm_clicked)
         self.btn_reset.clicked.connect(self.on_reset_clicked)
         self.btn_quit.clicked.connect(QCoreApplication.instance().quit)
+        self.btn_pwd_confirm.clicked.connect(self.on_pwd_confirm_clicked)
         self.lb_ds_img = GraffitiDialog(self.frame1_4)
 
     def on_confirm_clicked(self):
-        GraffitiDialog.save(self.lb_ds_img, "output.png")
-        img_path = "output.png"
-        self.process_img(img_path)
+        GraffitiDialog.save(self.lb_ds_img, "./img/output.png")
+        input_image_path = "./img/output.png"
+        output_image_path = './img/image_padding.png'
+
+        # Convert the original image to hex
+        hex_values = image_to_hex(input_image_path)
+
+        # Pad the hex values to 1920x1080 centered
+        padded_hex_image = pad_image_center(hex_values, 1920, 1080)
+
+        # Save the padded hex image
+        save_hex_image(padded_hex_image, output_image_path)
+
+        print("Image processing complete!")
+        self.process_img(output_image_path)
 
     def on_reset_clicked(self):
         GraffitiDialog.clear(self.lb_ds_img)
         self.lb_state.setText("Button Reset Clicked!")
 
+    def on_pwd_confirm_clicked(self):
+        self.lb_pwd_confirm.setText("Password Saved!")
+        self.lb_pwd_confirm.show()
+        imgKey = self.pwd_le.text()
+        imgKey_confirm = self.pwd_confirm_le.text()
+        while imgKey != imgKey_confirm:
+            self.lb_pwd_confirm.setText("Password Mismatch!")
+            self.lb_pwd_confirm.show()
+            imgKey = self.pwd_le.text()
+            imgKey_confirm = self.pwd_confirm_le.text()
+        self.lb_pwd_confirm.setText("Password Confirmed!")
+        key = custom_key(imgKey)
+        plaintext_b, plaintext_g, plaintext_r = image_hex_array("./img/image_padding.png")
+        ciphertext_global_b, ciphertext_global_g, ciphertext_global_r = Encrypt(plaintext_b, plaintext_g, plaintext_r, key)
+        print("Encryption complete!")
+        Decrypt(ciphertext_global_b, ciphertext_global_g, ciphertext_global_r, key)
+        print("Decryption complete!")
+
     def process_img(self, img_path):
         img = cv2.imread(img_path)
         print(f"Image Hight is: {img.shape[0]}\nImage Width is: {img.shape[1]}")
-        img_resize = cv2.resize(img, (1920, 1080))
-        cv2.imwrite("output_resize.png", img_resize)
-        img = cv2.imread("output_resize.png")
-        # print(f"Image Hight is: {img.shape[0]}\nImage Width is: {img.shape[1]}")
         b, g, r = cv2.split(img)
         # print(img.shape)
-
-        # cv2.imshow("Model Blue Image", b) 
-        # cv2.imshow("Model Green Image", g)
-        # cv2.imshow("Model Red Image", r)
 
         r_arr = np.array(r)
         g_arr = np.array(g)
@@ -55,13 +82,10 @@ class MainWindow(QMainWindow, Ui_Dialog):
         img_arr[:, :, 0] = b_arr
         img_arr[:, :, 1] = g_arr
         img_arr[:, :, 2] = r_arr
-        print(img_arr[:, :, 2])
+        # print(img_arr[:, :, 2])
         cv2.imshow("Original Image", img_arr)
         cv2.waitKey(0)
         cv2.destroyAllWindows()
-        # print(r_arr.shape)
-        # print(g_arr[0])
-        # print(b_arr[0])
 
         # ---------------- VGA ------------------
         # with open ("C://Users//angel//project_paper//My_project//20231116_AES_tes//AES_test//AES_2//src//b_channel_alt.h", "w") as f:

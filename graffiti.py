@@ -6,7 +6,7 @@ from PyQt5 import QtCore, QtWidgets, QtGui
 import numpy as np
 
 class GraffitiDialog(QWidget):
-    def __init__(self, parent=None, x = 280, y = 120, width = 640, height = 480):
+    def __init__(self, parent=None, x = 90, y = 120, width = 640, height = 480):
         super().__init__(parent)
         self.setGeometry(x, y, width, height)
         self.drawing = False

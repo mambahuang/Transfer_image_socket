@@ -24,44 +24,104 @@ def handle_client(connection, client_address):
             
             # Time start
             start = time.time()
-            if data.decode('utf-8') == "b":
-                f1 = open('./dat/ciphertext_b.dat', 'r')
-                count_b = 0
-                for line in f1:
-                    msg=line.strip('\n')
-                    msg_len = len(msg).to_bytes(4, 'big')
-                    connection.sendall(msg_len + msg.encode('utf-8'))
-                    count_b = count_b + 1
+            with open('./dat/ciphertext_b.dat', 'r') as f1:
+                    cipher_b = f1.read()
+            cipher_b = cipher_b.split('\n')
+            with open('./dat/ciphertext_g.dat', 'r') as f2:
+                    cipher_g = f2.read()
+            cipher_g = cipher_g.split('\n')
+            with open('./dat/ciphertext_r.dat', 'r') as f3:
+                    cipher_r = f3.read()
+            cipher_r = cipher_r.split('\n')
+            if data.decode('utf-8') == "b1":
+                for b_idx in range(32400):
+                    msg_len = len(cipher_b[b_idx]).to_bytes(4, 'big')
+                    connection.sendall(msg_len + cipher_b[b_idx].encode('utf-8'))
                     while connection.recv(1).decode('utf-8') != '1':
                         pass
-                f1.close()
                 time.sleep(1)
-            elif data.decode('utf-8') == "g":
-                f2 = open('./dat/ciphertext_g.dat', 'r')
-                count_g = 0
-                for line in f2:
-                    msg=line.strip('\n')
-                    msg_len = len(msg).to_bytes(4, 'big')
-                    connection.sendall(msg_len + msg.encode('utf-8'))
-                    count_g = count_g + 1
+            elif data.decode('utf-8') == "b2":
+                for b_idx in range(32400*1, 32400*2, 1):
+                    msg_len = len(cipher_b[b_idx]).to_bytes(4, 'big')
+                    connection.sendall(msg_len + cipher_b[b_idx].encode('utf-8'))
                     while connection.recv(1).decode('utf-8') != '1':
                         pass
-                f2.close()
                 time.sleep(1)
-            elif data.decode('utf-8') == "r":
-                f3 = open('./dat/ciphertext_r.dat', 'r')
-                count_r = 0
-                for line in f3:
-                    msg=line.strip('\n')
-                    msg_len = len(msg).to_bytes(4, 'big')
-                    connection.sendall(msg_len + msg.encode('utf-8'))
-                    count_r = count_r + 1
+            elif data.decode('utf-8') == "b3":
+                for b_idx in range(32400*2, 32400*3, 1):
+                    msg_len = len(cipher_b[b_idx]).to_bytes(4, 'big')
+                    connection.sendall(msg_len + cipher_b[b_idx].encode('utf-8'))
                     while connection.recv(1).decode('utf-8') != '1':
                         pass
-                f3.close()
+                time.sleep(1)
+            elif data.decode('utf-8') == "b4":
+                for b_idx in range(32400*3, 32400*4, 1):
+                    msg_len = len(cipher_b[b_idx]).to_bytes(4, 'big')
+                    connection.sendall(msg_len + cipher_b[b_idx].encode('utf-8'))
+                    while connection.recv(1).decode('utf-8') != '1':
+                        pass
+                time.sleep(1)
+            elif data.decode('utf-8') == "g1":
+                for g_idx in range(32400):
+                    msg_len = len(cipher_g[g_idx]).to_bytes(4, 'big')
+                    connection.sendall(msg_len + cipher_g[g_idx].encode('utf-8'))
+                    while connection.recv(1).decode('utf-8') != '1':
+                        pass
+                time.sleep(1)
+            elif data.decode('utf-8') == "g2":
+                for g_idx in range(32400*1, 32400*2, 1):
+                    msg_len = len(cipher_g[g_idx]).to_bytes(4, 'big')
+                    connection.sendall(msg_len + cipher_g[g_idx].encode('utf-8'))
+                    while connection.recv(1).decode('utf-8') != '1':
+                        pass
+                time.sleep(1)
+            elif data.decode('utf-8') == "g3":
+                for g_idx in range(32400*2, 32400*3, 1):
+                    msg_len = len(cipher_g[g_idx]).to_bytes(4, 'big')
+                    connection.sendall(msg_len + cipher_g[g_idx].encode('utf-8'))
+                    while connection.recv(1).decode('utf-8') != '1':
+                        pass
+                time.sleep(1)
+            elif data.decode('utf-8') == "g4":
+                for g_idx in range(32400*3, 32400*4, 1):
+                    msg_len = len(cipher_g[g_idx]).to_bytes(4, 'big')
+                    connection.sendall(msg_len + cipher_g[g_idx].encode('utf-8'))
+                    while connection.recv(1).decode('utf-8') != '1':
+                        pass
+                time.sleep(1)
+            elif data.decode('utf-8') == "r1":
+                for r_idx in range(32400):
+                    msg_len = len(cipher_r[r_idx]).to_bytes(4, 'big')
+                    connection.sendall(msg_len + cipher_r[r_idx].encode('utf-8'))
+                    while connection.recv(1).decode('utf-8') != '1':
+                        pass
+                time.sleep(1)
+            elif data.decode('utf-8') == "r2":
+                for r_idx in range(32400*1, 32400*2, 1):
+                    msg_len = len(cipher_r[r_idx]).to_bytes(4, 'big')
+                    connection.sendall(msg_len + cipher_r[r_idx].encode('utf-8'))
+                    while connection.recv(1).decode('utf-8') != '1':
+                        pass
+                time.sleep(1)
+            elif data.decode('utf-8') == "r3":
+                for r_idx in range(32400*2, 32400*3, 1):
+                    msg_len = len(cipher_r[r_idx]).to_bytes(4, 'big')
+                    connection.sendall(msg_len + cipher_r[r_idx].encode('utf-8'))
+                    while connection.recv(1).decode('utf-8') != '1':
+                        pass
+                time.sleep(1)
+            elif data.decode('utf-8') == "r4":
+                for r_idx in range(32400*3, 32400*4, 1):
+                    msg_len = len(cipher_r[r_idx]).to_bytes(4, 'big')
+                    connection.sendall(msg_len + cipher_r[r_idx].encode('utf-8'))
+                    while connection.recv(1).decode('utf-8') != '1':
+                        pass
                 time.sleep(1)
 
             time_end = time.time()
+            f1.close()
+            f2.close()
+            f3.close()
 
     except socket.timeout:
         print(f"Connection with {client_address} timed out.")
