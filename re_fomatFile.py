@@ -50,6 +50,7 @@ f6.write("#define VSize 1080\n")
 f6.write("#define PixelFrameSize HSize*VSize\n")
 f6.write("\n")
 f6.write("unsigned char cipher_r[PixelFrameSize] = {\n")
+
 for line in f3:
     for idx in range(0, len(line) - 2, 2):
         f6.write("0x" + line[idx:idx+2] + ", ")

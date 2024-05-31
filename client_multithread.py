@@ -14,7 +14,7 @@ def start_client(server_ip, message):
         count = 0
         ack = '1'
         f = open("cipher_" + message + "_test.txt", "w")
-        while count < 129600:
+        while count < 32400:
             count += 1
             # Receive the response
             header = client_socket.recv(4)
