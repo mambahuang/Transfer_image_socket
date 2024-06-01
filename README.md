@@ -5,7 +5,7 @@
 python3 main.py
 ```
 
-## Addinal Function using in main.py
+## Addinal Functions using in main.py
 > aes.py
 
 > graffiti.py
